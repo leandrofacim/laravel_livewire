@@ -11,7 +11,7 @@ class ShowTweets extends Component
 {
     use WithPagination;
 
-    public $content = 'apenas um teste';
+    public $content;
 
     protected $rules = [
         'content' => 'required|min:6'
@@ -38,7 +38,21 @@ class ShowTweets extends Component
         ]);
 
         session()->flash('message', 'Tweet criado com sucesso :)');
-
+        
         $this->content = '';
+    }
+
+    public function like($idTweet)
+    {
+        $tweet = Tweet::find($idTweet);
+
+        $tweet->likes()->create([
+            'user_id' => Auth::id(),
+        ]);
+    }
+
+    public function unlike(Tweet $tweet)
+    {
+        $tweet->likes()->delete();
     }
 }
